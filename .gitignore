@@ -1,0 +1,7 @@
+main
+objget
+objput
+objlist
+objgetacl
+objsetacl
+objtestacl
