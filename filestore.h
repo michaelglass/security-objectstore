@@ -1,27 +1,31 @@
-#ifndef FILESTORE
-#define FILESTORE
+#ifndef FILESTORE_H
+#define FILESTORE_H
 
-#include <string>
 #include <iostream>
+#include <string>
 
 namespace error
 {
 	struct NamedError
 	{
 		const char* name;
-		NamedError(const char* name) {this.name = name};
+		NamedError(const char* name) {this->name = name;}
 	};
 	
-	struct FileExistsError : public NamedError;
-	struct UserExistsError : public NamedError;
+	struct FileExistsError : public NamedError {};
+	struct UserExistsError : public NamedError {};
 }
 
-namespace FileStore
+namespace file_store
 {
+	using namespace std;
+	class User;
+	class Object;
+	
 	class Object
 	{	
 	public:
-		Object(string name, User owner)
+		Object(string name, User owner);
 		string get_name();
 		User get_user();
 		ostream get_object();
