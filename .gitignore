@@ -5,3 +5,4 @@ objlist
 objgetacl
 objsetacl
 objtestacl
+*.o

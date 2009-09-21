@@ -1,6 +1,8 @@
 #ifndef FILESTORE_H
 #define FILESTORE_H
 
+#define ALLOWED_ACCESS_CHARS "rwxpv"                    
+
 #include <iostream>
 #include <string>
 
