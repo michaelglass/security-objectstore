@@ -10,13 +10,11 @@ int main(int argc, char* argv[])
 {    
   using namespace std;
   
-  string *username, *groupname, *objname, **parsed_input;
-  if(!( parsed_input = utils::get_username_group_and_objname(argc, argv, USAGE_STRING) ) )
+  string username, groupname, objname;
+  if(! utils::get_params(argc, argv, USAGE_STRING, username, groupname, objname) )
     return 1;
 
-  username = parsed_input[0], groupname = parsed_input[1], objname = parsed_input[2];
-  
-  cout << "username: " << *username
-      << "\ngroupname: " << *groupname
-      << "\nobjname: " << *objname << "\n";
+  cout << "username: " << username
+      << "\ngroupname: " << groupname
+      << "\nobjname: " << objname << "\n";
 }

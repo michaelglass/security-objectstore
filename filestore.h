@@ -6,18 +6,6 @@
 #include <iostream>
 #include <string>
 
-namespace error
-{
-	struct NamedError
-	{
-		const char* name;
-		NamedError(const char* name) {this->name = name;}
-	};
-	
-	struct FileExistsError : public NamedError {};
-	struct UserExistsError : public NamedError {};
-}
-
 namespace file_store
 {
 	using namespace std;
