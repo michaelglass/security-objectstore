@@ -2,4 +2,5 @@ Object Store
 Michael Glass
 mgg2102
 
-This application implements a flat file system with users (identified by string username) and ACLs
+useradmin.rb
+manages the user file

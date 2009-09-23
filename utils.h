@@ -20,7 +20,6 @@ namespace utils
     @return returns 0 on failure, 1 on success
   */
   int get_params(int argc, char *argv[], const string& usage_string, string& username, string& groupname, string& objname);
-  int error(string error_message);
 }
 
 

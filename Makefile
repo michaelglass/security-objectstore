@@ -3,7 +3,7 @@ CXX=		g++
 CFLAGS=		#-g -Wall -O2 -m64
 CXXFLAGS=	$(CFLAGS)
 DFLAGS=		
-OBJS=		filestore.o utils.o
+OBJS=		objectstore.o utils.o
 PROGS=		main \
 			objput objget objlist \
 			objsetacl objgetacl objtestacl #assignment 1
@@ -41,7 +41,7 @@ objgetacl:$(OBJS) objgetacl.o
 objtestacl:$(OBJS) objtestacl.o
 	$(CXX) $(CXXFLAGS) $(DFLAGS) $(OBJS) objtestacl.o -o $@ $(LIBS)
 	
-filestore.o:filestore.h
+objectstore.o:objectstore.h
 utils.o:utils.h
 
 clean:

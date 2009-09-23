@@ -3,7 +3,6 @@
 #include <cerrno>
 #include <sys/types.h> //needed for various directory methods
 #include <sys/stat.h> //needed for various directory methods.
-// #include "filestore.h"
 using namespace std;
 
 //50 MB buffer

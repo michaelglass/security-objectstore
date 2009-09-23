@@ -1,7 +1,6 @@
 #include <iostream>
 #include <cctype>
-#include "filestore.h"
-
+#include "objectstore.h"
 #define USAGE_STRING  "Usage: objtestacl -u username -g groupname -a access objname\n" \
                       "  username        the username for whom access is being tested.\n" \
                       "  groupname       the groupname of the username whose access is being tested.\n" \

@@ -1,7 +1,6 @@
 #include <iostream>
 #include <string>
 
-#include "filestore.h"
 #define USAGE_STRING  "Usage: objlist -u username -g groupname [-l]\n" \
                       "  username        the username whose available objects are being listed.\n" \
                       "  groupname       the groupname of the username whose available objects are being listed.\n" \
