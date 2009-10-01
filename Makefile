@@ -3,8 +3,8 @@ CXX=		g++
 CFLAGS=		#-g -Wall -O2 -m64
 CXXFLAGS=	$(CFLAGS)
 DFLAGS=		
-OBJS=		objectstore.o utils.o
-PROGS=		main \
+OBJS=	 object.o user.o exceptions.o utils.o
+PROGS=		tests \
 			objput objget objlist \
 			objsetacl objgetacl objtestacl #assignment 1
 INCLUDES=	
@@ -20,8 +20,8 @@ LIBS=
 #first is default
 all:$(PROGS)
 
-main: $(OBJS) main.o
-	$(CXX) $(CXXFLAGS) $(DFLAGS) $(OBJS) main.o -o $@ $(LIBS)
+tests: $(OBJS) tests.o
+	$(CXX) $(CXXFLAGS) $(DFLAGS) $(OBJS) tests.o -o $@ $(LIBS)
 objput:$(OBJS) objput.o
 	$(CXX) $(CXXFLAGS) $(DFLAGS) $(OBJS) objput.o -o $@ $(LIBS)
 
@@ -41,8 +41,10 @@ objgetacl:$(OBJS) objgetacl.o
 objtestacl:$(OBJS) objtestacl.o
 	$(CXX) $(CXXFLAGS) $(DFLAGS) $(OBJS) objtestacl.o -o $@ $(LIBS)
 	
-objectstore.o:objectstore.h
-utils.o:utils.h
+object.o:object.h objectstore.h
+user.o:user.h objectstore.h
+exceptions.o:exceptions.h objectstore.h
+utils.o:utils.h objectstore.h
 
 clean:
 	rm -f *.o a.out $(PROGS) *~ *.a

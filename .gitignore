@@ -1,4 +1,5 @@
 main
+tests
 objget
 objput
 objlist
@@ -6,3 +7,4 @@ objgetacl
 objsetacl
 objtestacl
 *.o
+objectstore/*
