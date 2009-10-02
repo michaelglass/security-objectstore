@@ -8,9 +8,8 @@ namespace object_store
     {} 
   
   
-    NamedException::~NamedException() throw() {
-      delete this->_name;
-    }
+    NamedException::~NamedException() throw() 
+    {}
     const char* NamedException::what() throw() { return this->_name->c_str(); }
   
     InvalidNameException::InvalidNameException(const string& name, const string& type) throw() : NamedException(new string(name + "is not a valid " + type+ "-name."))
@@ -22,7 +21,7 @@ namespace object_store
     ObjectDoesntExistException::ObjectDoesntExistException(const string& name) throw() : NamedException(new string("Object \"" + name +"\" does not exist"))
     {}
   
-    PermissionDeniedException::PermissionDeniedException( User *user, Object* object) throw() : NamedException(new string("Access denied to file: " + *(object->name())))
+    PermissionDeniedException::PermissionDeniedException( User *user, Object* object) throw() : NamedException(new string("Access denied to file: " + object->name() + " for user <" + user->name() + ">" ))
     {}
   }
 }

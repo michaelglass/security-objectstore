@@ -1,20 +1,22 @@
 #ifndef MGG2102_SECURITY_OBJECTSTORE_USER_H
 #define MGG2102_SECURITY_OBJECTSTORE_USER_H
 
-#include "objectstore.h"
+#include <memory>
 
+#define USERFILE_NAME "userfile^"
 namespace object_store
 {
   class User
 	{
-    string* _name;
+    auto_ptr<string> _name;
+    auto_ptr<vector<const string*> > _groups;
+    auto_ptr<vector<Object*> > _objects;
 	public:
 	  /**
       checks to see if the name is valid
-      @param const string& object_name the new object's name
-
+      @param const string& user_name the new user's name
     */
-    static bool valid_name(const string& object_name);
+    static bool valid_name(const string& user_name);
 
 	  /**
 	   loads a user if it exists, else throws an exception
@@ -24,7 +26,7 @@ namespace object_store
 	   
 	   @throw Exception
 	  */
-    User(string *user_name) throw(exceptions::InvalidNameException, exceptions::UserDoesntExistException);
+    User(const string &user_name) throw(exceptions::InvalidNameException, exceptions::UserDoesntExistException);
     
     /**
     destructor
@@ -34,20 +36,20 @@ namespace object_store
       gets all of this user's objects
       @return a pointer to a vector of Object*'s
     */
-		vector<Object*>* objects();
+		const vector<Object*>* objects() const;
 		
 		/**
 	    gets the user's name
 	    @return a pointer to a string of the user's name
 	  */
-    string* name();
+    string name() const;
     
 	  
 		/**
 		  gets all of this users' groups
 		  @return a pointer to a vector of string*'s, each is a group this user is in. 
 		*/
-		vector<string*>* groups();
+		const vector<const string*>* groups() const;
 		
 		/**
 		  returns the user's access on an object
@@ -55,7 +57,7 @@ namespace object_store
 		  
 		  @return user's access
 		*/
-	  int access(const string& object_owner, const string& object_name);
+	  int access(const string& object_owner, const string& object_name) const;
 	};
 }
 #endif

@@ -10,7 +10,7 @@ namespace object_store
   {
     class NamedException : public exception {
     protected:
-     const string* _name;
+     auto_ptr<const string> _name;
 
     public:
      NamedException(const string* name) throw();
