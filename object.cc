@@ -78,13 +78,6 @@ Object::Object(const User* owner, const string& name, bool is_ACL) throw(excepti
   else
     throw new exceptions::InvalidNameException(name, is_ACL ? "ACL" : "object");      
 }
-
-Object::~Object()
-{
-  // delete _name;
-  // delete _owner;
-  // delete _data;
-}
  
 string Object::name()
 {

@@ -44,11 +44,6 @@ namespace object_store
     Object(const User* owner, const string& name, bool is_ACL = false ) throw(exceptions::InvalidNameException);
   
     /**
-      destructor
-    */
-    ~Object();
-  
-    /**
       gets the object name
     
       @return the object's name

@@ -4,12 +4,12 @@ namespace object_store
 {
   namespace exceptions
   {
-    NamedException::NamedException(const string* name) throw() : _name(name) 
+    NamedException::NamedException(const string* name) throw() : _name(name)
     {} 
-  
-  
-    NamedException::~NamedException() throw() 
+    
+    NamedException::~NamedException() throw()
     {}
+  
     const char* NamedException::what() throw() { return this->_name->c_str(); }
   
     InvalidNameException::InvalidNameException(const string& name, const string& type) throw() : NamedException(new string(name + "is not a valid " + type+ "-name."))

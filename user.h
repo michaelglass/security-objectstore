@@ -28,14 +28,6 @@ namespace object_store
 	  */
     User(const string &user_name) throw(exceptions::InvalidNameException, exceptions::UserDoesntExistException);
     
-    /**
-    destructor
-    */
-    ~User();
-    /**
-      gets all of this user's objects
-      @return a pointer to a vector of Object*'s
-    */
 		const vector<Object*>* objects() const;
 		
 		/**

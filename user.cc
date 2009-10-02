@@ -58,11 +58,6 @@ User::User(const string& user_name) throw(exceptions::InvalidNameException, exce
     throw new exceptions::InvalidNameException(user_name, "user");      
 }
 
-User::~User()
-{
-}
-
-
 const vector<Object*>* User::objects() const
 {
   if(_objects->size() == 0)
