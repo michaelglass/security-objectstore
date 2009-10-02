@@ -88,73 +88,132 @@ const User* Object::owner()
 {
   return _owner.get();
 }
-// 
-// istream* Object::data()
-// {
-//   _data->seekg(0, ios::beg);
-//   return _data;
-// }
-// 
-// 
-// bool Object::exists()
-// {
-//   return _data && Object::exists(*_owner->name(), *_name);
-// }
-// 
-// Object* Object::ACL()
-// {
-//   if(is_ACL())
-//     return this;
-//   else if(exists()) //if this object is initialized
-//     return new Object(_owner, (_name + '@'), true);
-//   else
-//     return 0;
-// }
-// 
-// bool Object::is_ACL()
-// { return _is_ACL; }
-// 
-// int Object::write(istream& obj_contents)
-// {
-//   ofstream outfile;
-//   string *path;
-//   if(exists()) //should always exist for ACL
-//   {
-//     _data->close();
-//   }
-//   else
-//   {
-//     //create default ACL
-//     path = this->path(true);
-//     outfile.open(path->c_str());
-//     outfile << *(owner()->name()) << ".* rwxpv\n";
-//     outfile.close();
-//     delete path;
-//   }
-//   path = this->path();
-//   outfile.open(path->c_str());
-//   outfile << obj_contents;
-//   outfile.close();
-//   
-//   _data->open(path->c_str());
-//   delete path;
-// }
-// 
-// long Object::size()
-// {
-//   istream* data = this->data();
-//   if(data)
-//   {
-//     long begin;
-//     begin = data->tellg();
-//     data->seekg(0, ios::end);
-//     return (long)data->tellg() - begin;
-//   }
-//   else
-//     return -1;
-// }
-// 
-// bool Object::hidden()
-// {
-//   return is_ACL();
-// }
+
+istream* Object::data()
+{
+  _data->seekg(0, ios::beg);
+  return (istream*) _data.get();
+}
+
+
+bool Object::exists()
+{
+  return _data.get() && Object::exists(_owner->name(), *_name);
+}
+
+Object* Object::ACL()
+{
+  if(is_ACL())
+    return this;
+  else if(exists()) //if this object is initialized
+    return new Object(_owner.get(), *_name , true);
+  else
+    return 0;
+}
+
+bool Object::is_ACL()
+{ return _is_ACL; }
+
+int Object::write(istream& obj_contents)
+{
+  ofstream outfile;
+  string path;
+  if(exists()) //should always exist for ACL
+  {
+    _data->close();
+  }
+  else
+  {
+    //create default ACL
+    path = Object::path(_owner->name(), *_name, true);
+    outfile.open(path.c_str());
+    outfile << _owner->name() << ".* rwxpv\n";
+    outfile.close();
+  }
+  path = this->path();
+  outfile.open(path.c_str());
+  outfile << obj_contents;
+  outfile.close();
+  
+  _data->open(path.c_str());
+}
+
+long Object::size()
+{
+  if(this->exists())
+  {
+    long begin;
+    ifstream* data = (ifstream*) this->data();
+    begin = data->tellg();
+    data->seekg(0, ios::end);
+    return (long)data->tellg() - begin;
+  }
+  else
+    return -1;
+}
+
+bool Object::hidden()
+{
+  return is_ACL();
+}
+
+int Object::access(const User& u)
+{
+  int access = 0;
+  if(is_ACL())
+    return -1;
+  else
+  {
+    auto_ptr<Object> ACL(this->ACL());
+    istream* data = ACL->data();
+    while(data->good() && !access)
+    {
+      string line;
+      getline(*data, line);
+      if(line.length() > 0)
+      {
+        size_t curr_offset = 0;
+        size_t next_offset = line.find_first_of('.', curr_offset);
+        string user = line.substr(next_offset, curr_offset);
+        if(user == "*" || user == u.name()) //username match!
+        {
+          curr_offset = next_offset;
+          next_offset = line.find_first_of(' ', curr_offset);
+          string group = line.substr(next_offset, curr_offset);
+          if(group == "*" || u.in_group(group))
+          {
+            string permissions = line.substr(next_offset);
+            string::iterator it;
+            for(it = permissions.begin(); it < permissions.end(); it++)
+              switch(*it)
+              {
+                case 'r':
+                  access |= permissions::READ;
+                  break;
+                case 'w':
+                  access |= permissions::WRITE;
+                  break;
+                case 'x':
+                  access |= permissions::EXECUTE;
+                  break;
+                case 'p':
+                  access |= permissions::PERMISSIONS;
+                  break;
+                case 'v':
+                  access |= permissions::VIEW;
+                  break;
+                break;
+                case ' ':
+                  //error, should not get here, but who cares
+                break;
+                default:
+                  //error, should not get here, but who cares
+                break;
+              }
+          }
+        }
+      }
+    }
+  }
+  return access;
+}

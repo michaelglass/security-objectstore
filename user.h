@@ -44,12 +44,18 @@ namespace object_store
 		const vector<const string*>* groups() const;
 		
 		/**
+		  checks to see if user is in the group
+		  @return true if user is in the group, false otherwise
+		*/
+    bool in_group(const string& group_name) const;
+		
+		/**
 		  returns the user's access on an object
 		  can be &d with permissions:USER_* to see what the actual permissions are.
 		  
 		  @return user's access
 		*/
-	  int access(const string& object_owner, const string& object_name) const;
+	  int access(const Object& object) const;
 	};
 }
 #endif

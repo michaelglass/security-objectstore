@@ -94,3 +94,12 @@ const vector<const string*>* User::groups() const
   return _groups.get();
 }
 
+bool User::in_group(const string& group_name) const
+{
+  vector<const string*>::iterator it;
+  for(it = _groups->begin(); it < _groups->end(); it++)
+    if(**it == group_name)
+      return true;
+  return false;
+}
+

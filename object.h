@@ -16,6 +16,19 @@ namespace object_store
     string path();
     static string path(const string& user_name, const string& object_name, bool is_ACL = false);
 
+    	/**
+    	  gets the object's ACL for writing and reading.  gets self if obj is an ACL.
+
+    	  @return the object's ACL
+    	*/
+      Object* ACL();
+
+      /**
+        returns true if this is an ACL
+        @returns true if the object is an ACL
+      */
+      bool is_ACL();
+
   public:
     /**
       checks to see if the name is valid
@@ -42,7 +55,7 @@ namespace object_store
       @return the Object created or loaded.
     */
     Object(const User* owner, const string& name, bool is_ACL = false ) throw(exceptions::InvalidNameException);
-  
+    
     /**
       gets the object name
     
@@ -61,26 +74,13 @@ namespace object_store
 	  
   	  @return the object's data in the form of an istream
   	*/
-  	istream& data();
+  	istream* data();
 
   	/**
   	  returns true if the object exists.  false otherwise
   	  @return true if the object exists
   	*/
     bool exists();
-	
-  	/**
-  	  gets the object's ACL for writing and reading.  gets self if obj is an ACL.
-	  
-  	  @return the object's ACL
-  	*/
-    Object* ACL();
-  
-    /**
-      returns true if this is an ACL
-      @returns true if the object is an ACL
-    */
-    bool is_ACL();
     
     /**
       writes the istream's contents to the object
@@ -92,6 +92,15 @@ namespace object_store
     int write(istream& obj_contents);
   
     /**
+      writes the istream's contents to the object's acl
+    
+      @param istream& obj_contents the info to write to the object's ACL
+    
+      @return 1 on success.  0 on failure.  Failure has to do with incorrect access or malformed ACL
+    */
+  
+    int write_ACL(istream& obj_contents);
+    /**
       returns the size of the object in bytes or -1 if it doesn't exist
     
       @return the size of the object in bytes.  returns -1 if it doesn't exist
@@ -102,6 +111,22 @@ namespace object_store
   	  returns whether or not this object can be seen.  A hidden object can't be listed (ie, an ACL)
   	*/
   	bool hidden();
+
+  	/**
+  	  returns the user's access to this file
+  	  
+  	  ACL's are parsed top-to-bottom and quit as soon as they find a match.  First they match user, then groups.  Here's an example:
+  	  
+  	  ACL:
+  	  jon.* rwxpv
+  	  *.dudes rx
+  	  *.dudettes rwxpv
+  	  
+  	  
+  	  @param const User& u the user to tests access on
+  	  @return int the user's access defined as a bitstring of length 10, or -1 for failure (usually  object is an ACL)
+  	*/
+    int access(const User& u);
   };
 }
 #endif
